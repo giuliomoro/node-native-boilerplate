@@ -1,4 +1,5 @@
 #include "functions.h"
+#include <unistd.h>
 
 NAN_METHOD(nothing) {
 }
@@ -11,7 +12,24 @@ NAN_METHOD(aBoolean) {
     info.GetReturnValue().Set(false);
 }
 
+// Handle Ctrl-C by requesting that the audio rendering stop
+int gShouldStop = false;
+void interrupt_handler(int var)
+{
+	gShouldStop = true;
+}
 NAN_METHOD(aNumber) {
+	  signal(SIGINT, interrupt_handler);
+	  signal(SIGTERM, interrupt_handler);
+    //for(int n = 0; n < 100; ++n)
+    int n = 0;
+    while(!gShouldStop)
+    {
+      printf("Here %d\n", n++);
+      usleep(100000);
+    }
+    printf("Gstopped\n");
+       
     info.GetReturnValue().Set(1.75);
 }
 
