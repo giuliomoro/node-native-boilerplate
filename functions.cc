@@ -13,23 +13,7 @@ NAN_METHOD(aBoolean) {
 }
 
 // Handle Ctrl-C by requesting that the audio rendering stop
-int gShouldStop = false;
-void interrupt_handler(int var)
-{
-	gShouldStop = true;
-}
 NAN_METHOD(aNumber) {
-	  signal(SIGINT, interrupt_handler);
-	  signal(SIGTERM, interrupt_handler);
-    //for(int n = 0; n < 100; ++n)
-    int n = 0;
-    while(!gShouldStop)
-    {
-      printf("Here %d\n", n++);
-      usleep(100000);
-    }
-    printf("Gstopped\n");
-       
     info.GetReturnValue().Set(1.75);
 }
 
@@ -47,9 +31,26 @@ NAN_METHOD(anArray) {
     info.GetReturnValue().Set(arr);
 }
 
+int defaultMain(int, char* argv[], void*, void*);
 NAN_METHOD(callback) {
-    v8::Local<v8::Function> callbackHandle = info[0].As<v8::Function>();
-    Nan::MakeCallback(Nan::GetCurrentContext()->Global(), callbackHandle, 0, 0);
+    v8::Local<v8::Array> arr = info[0].As<v8::Array>();
+    v8::Local<v8::Function> callbackHandle = info[1].As<v8::Function>();
+	defaultMain(0, NULL, (void*)&arr, (void*)&callbackHandle);
+	return;
+
+    //v8::Local<v8::Array> arr = Nan::New<v8::Array>(3);
+    //Nan::Set(arr, 0, Nan::New(1));
+    //Nan::Set(arr, 1, Nan::New(2));
+    //Nan::Set(arr, 2, Nan::New(3));
+	int argc = 1;
+	v8::Local<v8::Value> argv[argc] = {arr};
+	int length = arr->Length();
+	for(int n = 0; n < length; ++n){
+		//Nan::Maybe<double> val = Nan::To<double>(Nan::Get(arr, n).ToLocalChecked());
+		double num = Nan::Get(arr, n).ToLocalChecked()->NumberValue();
+		printf("Here: %f\n", num);
+	}
+    Nan::MakeCallback(Nan::GetCurrentContext()->Global(), callbackHandle, argc, argv);
 }
 
 // Wrapper Impl
