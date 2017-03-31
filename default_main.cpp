@@ -77,6 +77,7 @@ int defaultMain(int argc, char *argv[], void* jsArr, void* jsCallback)
 		cout << "Error: unable to start real-time audio" << endl;
 		return -1;
 	}
+	Bela_cleanupAudio();
 
 	// All done!
 	return 0;
