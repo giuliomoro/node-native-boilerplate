@@ -21,10 +21,12 @@ bool setup(BelaContext *context, void *userData)
 void render(BelaContext *context, void *userData)
 {
 	float freq = analogRead(context, 0, 0) * 300 + 150;
-	// Passing the frequency to js in the first element of the array
+	// writing the frequency to js in the first element of the js array
 	Nan::Set(arr, 0, Nan::New(freq));
+	// calling the js callback
     Nan::MakeCallback(Nan::GetCurrentContext()->Global(), callbackHandle, argc, argv);
 	for(unsigned int n = 0; n < context->audioFrames; n++) {
+		// reading the content of the js array
 		float out = Nan::Get(arr, n).ToLocalChecked()->NumberValue();
 		for(unsigned int channel = 0; channel < context->audioOutChannels; channel++) {
 			audioWrite(context, n, channel, out);
