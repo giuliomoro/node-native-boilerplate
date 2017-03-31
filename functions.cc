@@ -42,15 +42,15 @@ NAN_METHOD(callback) {
     //Nan::Set(arr, 0, Nan::New(1));
     //Nan::Set(arr, 1, Nan::New(2));
     //Nan::Set(arr, 2, Nan::New(3));
-	int argc = 1;
-	v8::Local<v8::Value> argv[argc] = {arr};
-	int length = arr->Length();
-	for(int n = 0; n < length; ++n){
+	//int argc = 1;
+	//v8::Local<v8::Value> argv[argc] = {arr};
+	//int length = arr->Length();
+	//for(int n = 0; n < length; ++n){
 		//Nan::Maybe<double> val = Nan::To<double>(Nan::Get(arr, n).ToLocalChecked());
-		double num = Nan::Get(arr, n).ToLocalChecked()->NumberValue();
-		printf("Here: %f\n", num);
-	}
-    Nan::MakeCallback(Nan::GetCurrentContext()->Global(), callbackHandle, argc, argv);
+		//double num = Nan::Get(arr, n).ToLocalChecked()->NumberValue();
+		//printf("Here: %f\n", num);
+	//}
+    //Nan::MakeCallback(Nan::GetCurrentContext()->Global(), callbackHandle, argc, argv);
 }
 
 // Wrapper Impl

@@ -68,30 +68,15 @@ int defaultMain(int argc, char *argv[], void* jsArr, void* jsCallback)
 		return -1;
 	}
 
-	// Start the audio device running
-	if(Bela_startAudio()) {
-		cout << "Error: unable to start real-time audio" << endl;
-		// Stop the audio device
-		Bela_stopAudio();
-		// Clean up any resources allocated for audio
-		Bela_cleanupAudio();
-		return -1;
-	}
-
 	// Set up interrupt handler to catch Control-C and SIGTERM
 	signal(SIGINT, interrupt_handler);
 	signal(SIGTERM, interrupt_handler);
 
-	// Run until told to stop
-	while(!gShouldStop) {
-		usleep(100000);
+	// Start the audio device running
+	if(Bela_runInSameThread()) {
+		cout << "Error: unable to start real-time audio" << endl;
+		return -1;
 	}
-
-	// Stop the audio device
-	Bela_stopAudio();
-
-	// Clean up any resources allocated for audio
-	Bela_cleanupAudio();
 
 	// All done!
 	return 0;

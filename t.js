@@ -1,14 +1,25 @@
 var ne = require('./');
 
-function doPrint(a)
+var phase = 0;
+
+var frequency = 100;
+var inc = 2 * frequency / 44100;
+var n = 0;
+function saw(a)
 {
-	var inv = 1/a.length;
-	for(var n = 0; n < a.length; ++n){
-		//console.log(n+" "+a[n]);
-		a[n] += n * inv;
+	// getting in the frequency as the first value in the array
+	frequency = a[0];
+
+	inc = 2 * frequency / 44100;
+	//console.log(inc);
+	for( n = 0; n < a.length; ++n){
+		phase += inc;
+		a[n] = phase;
+		if(phase >= 1)
+			phase -= 2;
 	}
 }
-//ne.aNumber();
-var len = 64;
+
+var len = 128;
 var arr = Array.from({ length: len }, () => 0);
-ne.callback(arr, doPrint);
+ne.callback(arr, saw);
