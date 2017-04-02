@@ -32,10 +32,19 @@ NAN_METHOD(anArray) {
 }
 
 int defaultMain(int, char* argv[], void*, void*);
+
 NAN_METHOD(callback) {
-    v8::Local<v8::Array> arr = info[0].As<v8::Array>();
+	v8::Local<v8::TypedArray> typedArray = info[0].As<v8::TypedArray>();
     v8::Local<v8::Function> callbackHandle = info[1].As<v8::Function>();
-	defaultMain(0, NULL, (void*)&arr, (void*)&callbackHandle);
+	//Nan::TypedArrayContents<float> vfloat(ta);
+	//float* p = (*vfloat);
+	//for(int n = 0; n < vfloat.length(); ++n){
+		//printf("element[%d]: %f\n", n, p[n]);
+		//p[n] += 1;
+	//}
+	//arr = *(v8::Local<v8::Array>*)jsArgs->arr;
+    //Nan::MakeCallback(Nan::GetCurrentContext()->Global(), callbackHandle, argc, argv);
+	defaultMain(0, NULL, (void*)&typedArray, (void*)&callbackHandle);
 	return;
 
     //v8::Local<v8::Array> arr = Nan::New<v8::Array>(3);
